@@ -35,6 +35,8 @@ import { localURI } from '@/components/source';
 import { LinksType } from '@/components/types';
 import Link from 'next/link';
 import { handleInactiveLink, handleRemoveLink } from '@/components/actions';
+import { useRecoilState } from 'recoil';
+import { links_State } from '@/components/atoms';
 
 const style = {
   position: 'absolute',
@@ -99,7 +101,7 @@ export default function Dashboard() {
   const params = useParams();
 
   const [anchorEl, setAnchorEl] = useState<any>(null);
-  const [linkData, setLinkData] = useState<LinksType[]>([]);
+  const [linkData, setLinkData] = useRecoilState(links_State);
   const [currentLinkId, setCurrentLinkId] = useState<number | null>(null);
 
   const [url, setUrl] = useState<string>('');
