@@ -1,5 +1,6 @@
 'use server';
 
+import toast from 'react-hot-toast';
 import { localURI } from './source';
 
 export const handleRemoveLink = async (userId: number, linkId: number) => {

@@ -1,20 +1,8 @@
 'use client';
 
 import { LinkIcon } from 'lucide-react';
-import { styled } from '@mui/material/styles';
-import { Table, tableCellClasses } from '@mui/material';
-import { TableBody } from '@mui/material';
-import { TableCell } from '@mui/material';
-import { TableHead } from '@mui/material';
-import { TableRow } from '@mui/material';
 import { IconButton } from '@mui/material';
-import { Menu } from '@mui/material';
-import { MenuItem } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
-import { LinkOff, LinkSharp } from '@mui/icons-material';
-import { Delete } from '@mui/icons-material';
 import { QrCode2 } from '@mui/icons-material';
-import { Edit } from '@mui/icons-material';
 import { ContentCopy } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import { toPng } from 'html-to-image';
@@ -32,11 +20,10 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { localURI } from '@/components/source';
-import { LinksType } from '@/components/types';
 import Link from 'next/link';
-import { handleInactiveLink, handleRemoveLink } from '@/components/actions';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { links_State } from '@/components/atoms';
+import { TableComponent } from '@/components/table';
 
 const style = {
   position: 'absolute',
@@ -64,45 +51,11 @@ const styleLink = {
   p: 4,
 };
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#f3f4f6',
-    color: '#898989',
-    fontSize: 12,
-    border: 0,
-    padding: 11,
-    [theme.breakpoints.down('xl')]: {
-      fontSize: 10,
-      padding: 8,
-    },
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 11,
-    border: 0,
-    padding: 14,
-    [theme.breakpoints.down('xl')]: {
-      fontSize: 9,
-      padding: 10,
-    },
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(even)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
 export default function Dashboard() {
   const router = useRouter();
   const params = useParams();
 
-  const [anchorEl, setAnchorEl] = useState<any>(null);
-  const [linkData, setLinkData] = useRecoilState(links_State);
-  const [currentLinkId, setCurrentLinkId] = useState<number | null>(null);
+  const setLinkData = useSetRecoilState(links_State);
 
   const [url, setUrl] = useState<string>('');
   const [openQr, setOpenQr] = useState<boolean>(false);
@@ -167,8 +120,6 @@ export default function Dashboard() {
       })
       .catch((err: any) => console.log('something went wrong : ', err.message));
   };
-
-  const handleClose = () => setAnchorEl(null);
 
   const copyToClipboard = (url: string) => {
     navigator.clipboard
@@ -410,185 +361,8 @@ export default function Dashboard() {
                 </Fade>
               </Modal>
             </div>
-            <div className="font-sans xl:mt-5 xl:mb-2 2xl:mt-10 2xl:mb-4">
-              <Table
-                sx={{ minWidth: 400, border: 'none' }}
-                aria-label="customized table"
-                size="small"
-              >
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell
-                      align="left"
-                      style={{
-                        borderTopLeftRadius: 15,
-                        borderBottomLeftRadius: 15,
-                      }}
-                    >
-                      Status
-                    </StyledTableCell>
-                    <StyledTableCell align="left">Domain</StyledTableCell>
-                    <StyledTableCell
-                      align="center"
-                      style={{
-                        borderTopRightRadius: 15,
-                        borderBottomRightRadius: 15,
-                      }}
-                    >
-                      Actions
-                    </StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {linkData?.map((row: LinksType) => {
-                    return (
-                      <StyledTableRow key={row.id}>
-                        <StyledTableCell
-                          align="left"
-                          style={{
-                            borderTopLeftRadius: 15,
-                            borderBottomLeftRadius: 15,
-                          }}
-                        >
-                          {row.status === 'active' ? (
-                            <div
-                              className="bg-green-300 text-green-800 w-fit h-auto p-1 font-sans flex"
-                              style={{ borderRadius: 10 }}
-                            >
-                              {' '}
-                              <div className="bg-green-800 w-1 h-1 rounded-xl mt-1.5 ml-1 mr-1"></div>
-                              <div className="font-sans mr-1">Active</div>
-                            </div>
-                          ) : (
-                            <div
-                              className="bg-red-300 text-red-800 w-fit h-auto p-1 font-sans flex"
-                              style={{ borderRadius: 10 }}
-                            >
-                              {' '}
-                              <div className="bg-red-800 w-1 h-1 rounded-xl mt-1.5 ml-1 mr-1"></div>
-                              <div className="font-sans mr-1">Inactive</div>
-                            </div>
-                          )}
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          <Link
-                            href={row.link}
-                            className="text-purple-700 text-sm font-sans font-medium"
-                          >
-                            {row.link}
-                          </Link>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="right"
-                          style={{
-                            borderTopRightRadius: 15,
-                            borderBottomRightRadius: 15,
-                          }}
-                        >
-                          <div>
-                            <Tooltip
-                              title="Copy"
-                              onClick={() => copyToClipboard(row.link)}
-                            >
-                              <IconButton>
-                                <ContentCopy
-                                  fontSize="small"
-                                  style={{ fontSize: 17, color: '#19a89d' }}
-                                />
-                              </IconButton>
-                            </Tooltip>
-                            <IconButton
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={anchorEl ? 'long-menu' : undefined}
-                              aria-expanded={anchorEl ? 'true' : undefined}
-                              aria-haspopup="true"
-                              onClick={(event: any) => {
-                                setAnchorEl(event.currentTarget);
-                                setCurrentLinkId(row.id);
-                              }}
-                              size="small"
-                            >
-                              <MoreVert fontSize="small" />
-                            </IconButton>
-                            <Menu
-                              open={anchorEl}
-                              id="long-menu"
-                              MenuListProps={{
-                                'aria-labelledby': 'long-button',
-                              }}
-                              anchorEl={anchorEl}
-                              onClose={handleClose}
-                              style={{
-                                width: 'auto',
-                                boxShadow: 'none',
-                                fontSize: 12,
-                                border: '1px solid gray',
-                                borderRadius: 15,
-                              }}
-                            >
-                              <MenuItem
-                                className="text-sm text-slate-500"
-                                onClick={async () => {
-                                  const response = await handleInactiveLink(
-                                    row.userId,
-                                    currentLinkId ?? 0
-                                  );
-
-                                  if (!response?.bool)
-                                    return toast.error('something went wrong');
-
-                                  toast.success('Link updated!');
-                                  setLinkData(response?.links);
-                                }}
-                              >
-                                {row.status === 'active' ? (
-                                  <>
-                                    <LinkOff className="mr-2 inActive text-cyan-500" />
-                                    {'Inactive'}
-                                  </>
-                                ) : (
-                                  <>
-                                    <LinkSharp className="mr-2 inActive text-cyan-500" />
-                                    {'Activate'}
-                                  </>
-                                )}
-                              </MenuItem>
-                              <MenuItem
-                                className="text-sm text-slate-500"
-                                onClick={handleClose}
-                              >
-                                <Edit className="mr-2 editOptions text-green-500" />{' '}
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                className="text-sm text-slate-500"
-                                onClick={async () => {
-                                  const response = await handleRemoveLink(
-                                    row.userId,
-                                    currentLinkId ?? 0
-                                  );
-
-                                  if (!response?.bool)
-                                    return toast.error('something went wrong');
-
-                                  toast.success('Link deleted!');
-                                  setAnchorEl(null);
-                                  setLinkData(response?.links);
-                                }}
-                              >
-                                <Delete className="mr-2 deleteOptions text-red-500" />{' '}
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
+            <div className="font-sans xl:mt-5 xl:mb-2 2xl:mt-10 2xl:mb-4"></div>
+            <TableComponent />
           </div>
         </div>
       </div>

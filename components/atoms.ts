@@ -6,3 +6,7 @@ export const links_State = atom<LinksType[]>({
   default: [],
 });
 
+export const anchorElState = atom<any>({
+  key: 'anchorElState',
+  default: null,
+});

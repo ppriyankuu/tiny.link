@@ -6,11 +6,12 @@ import { motion } from 'framer-motion';
 import { localURI } from '@/components/source';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import { links_State } from '@/components/atoms';
+import { useRecoilState } from 'recoil';
 
 export default function View() {
   const params = useParams();
-
-  const [userData, setUserData] = useState<any>([]);
+  const [userData, setUserData] = useRecoilState(links_State);
   const [username, setUsername] = useState<any>('cranky');
 
   const { slug } = params;
