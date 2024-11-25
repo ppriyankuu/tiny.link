@@ -154,7 +154,7 @@ export const TableComponent = () => {
                 >
                   <div>
                     <Tooltip
-                      title="Copy"
+                      title='Copy'
                       onClick={() => copyToClipboard(row.link)}
                     >
                       <IconButton>
