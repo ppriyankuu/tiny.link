@@ -168,7 +168,7 @@ export default function Dashboard() {
           <div className="flex">
             <Image
               src={logo}
-              alt="logo"
+              alt='logo'
               style={{ height: '11%', width: '11%' }}
             />
             <span className=" text-base cursor-pointer xl:mt-1.5 2xl:mt-4 font-sans text-slate-500 ml-10 mr-5">
