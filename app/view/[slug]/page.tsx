@@ -12,7 +12,7 @@ import { useRecoilState } from 'recoil';
 export default function View() {
   const params = useParams();
   const [userData, setUserData] = useRecoilState(links_State);
-  const [username, setUsername] = useState<any>('cranky');
+  const [username, setUsername] = useState<string>('cranky');
 
   const { slug } = params;
 
