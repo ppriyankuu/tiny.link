@@ -77,7 +77,7 @@ export default function View() {
                   </div>
                 </motion.div>
               ) : (
-                ''
+                null
               );
             })
           : null}
