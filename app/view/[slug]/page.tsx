@@ -1,5 +1,6 @@
 'use client';
 
+
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
