@@ -40,9 +40,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 11,
-    border: 0,
-    padding: 14,
+  
     [theme.breakpoints.down('xl')]: {
       fontSize: 9,
       padding: 10,
